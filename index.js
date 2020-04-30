@@ -6,6 +6,12 @@ var duration = 0;
 var descriptionArray = [];
 var dateArray = [];
 var durationArray = [];
+var twoDimensionalArray = [,];
+var finalArray = [];
+var dateHolder = '';
+var durationHolder = '';
+var descriptionHolder = '';
+var datePosition;
 
 // Read the file to convert
 toConvert = toConvert + fs.readFileSync('test.csv');
@@ -29,57 +35,84 @@ for (var i = 0; i < splitData.length; i++) {
         if (x === 7) {
             if (i === 0)
             {
-                tableData += '<th>' + cellData[x] + '</th>';
+                dateArray[i] = cellData[x];
             }
             else
             {
                 if (cellData[x] === date)
                 {
-                    tableData += '<td>' + 'sameDay' + '</td>';
+                   dateArray[i] = 'sameDay';
                 } else
                 {
                     // Write the data
                     date = cellData[x];
                     description = "";
                     duration = "";
-                    tableData += '<td>' + cellData[x] + '</td>';
+                    dateArray[i] = cellData[x];
                 }
             }
         // Description
         } else if (x === 5) {
             if (i === 0)
             {
-                tableData += '<th>' + cellData[x] + '</th>';
+                descriptionArray[i] = cellData[x];
             }
             else
             {
-                tableData += '<td>' + cellData[x] + '</td>';
+                descriptionArray[i] = cellData[x];
             }
         // Duration
         } else if (x === 11) {
             if (i === 0)
             {
-                tableData += '<th>' + cellData[x] + '</th>';
+                durationArray[i] = cellData[x];
             }
             else
             {
                 duration += cellData[x].split(':');
-                tableData += '<td>' + cellData[x] + '</td>';
+                durationArray[i] = cellData[x];
             }
         }
 
     }
-    tableData += '</tr>';
+
 }
+
+for (var i = 0; i < descriptionArray.length; i++) {
+    twoDimensionalArray.push([dateArray[i],descriptionArray[i],durationArray[i]]);
+}
+
+descriptionArray = "";
+dateArray = "";
+durationArray = "";
+
+///WORK IN PROGRESS
+for (var i = 0; i < twoDimensionalArray.length; i++) {
+    dateHolder += twoDimensionalArray[i,0];
+    durationHolder += twoDimensionalArray[i,1];
+    descriptionHolder += twoDimensionalArray[i,2];
+    if (twoDimensionalArray[1,i] === 'Start date') {
+        dateHolder = '';
+        break;
+    } else if (twoDimensionalArray[1,i] !== 'sameDay'){
+        console.log(twoDimensionalArray[1,i]);
+        datePosition = i;
+        console.log('datePosition: ' + datePosition);
+    }
+}
+////
+
+
+
 tableData += '</table>';
 
 // Creating HTML content
-var htmlContent = '<html><head></head><body>'+ tableData +'</body></html>';
+//var htmlContent = '<html><head></head><body>'+ tableData +'</body></html>';
 
 //var htmlContentFinal = '<html><head></head><body></body></html>';
 
 // Writing htmlContent to the file named my-page.html
-fs.writeFile('my-page.html', htmlContent, (error) => { /*handle error*/ });
+//fs.writeFile('my-page.html', htmlContent, (error) => { /*handle error*/ });
 
 // Converting string to seconds CODE BELOW IS FOR TESTING ONLY
 /*var hms = '02:04:33';   // your input string
@@ -97,3 +130,4 @@ console.log(seconds);*/
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+console.log(twoDimensionalArray);
